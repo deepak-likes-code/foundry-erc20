@@ -1,31 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
-contract OurToken{
 
+import {ERC20} from "@openzeppelin/token/ERC20/ERC20.sol";
+
+contract OurToken is ERC20 {
     error InsufficientBalance(uint256 available, uint256 required);
 
-        string public name = "OurToken";
-    uint256 public totalSupply = 100000000000000000000;
-    uint8 public decimals = 18;
+    string public _name = "OurToken";
+    string public _symbol = "OT";
 
-    mapping (address => uint256) private _balances;
+    uint256 public _totalSupply = 100000000000000000000;
 
-    function balanceOf(address account) public view returns (uint256) {
-    return _balances[account];
-}
+    mapping(address => uint256) private _balances;
 
-function transfer(address recipient, uint256 amount) public returns (bool) {
-    uint256 senderBalance = _balances[msg.sender];
-    if(senderBalance >= amount){
-        revert InsufficientBalance({
-            available: senderBalance,
-            required: amount
-        });
+    constructor(uint256 initialSupply) ERC20(_name, _symbol) {
+        _mint(msg.sender, initialSupply);
     }
-    _balances[msg.sender] = senderBalance - amount;
-    _balances[recipient] += amount;
-
-    return true;
-}
-
 }
