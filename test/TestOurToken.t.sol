@@ -24,4 +24,16 @@ contract TestOurToken is Test {
 
         assertEq(ourToken.balanceOf(bob), STARTING_BALANCE);
     }
+
+    function testTransferAllowances() public {
+        uint256 allowanceLimit= 1000;
+
+        vm.prank(bob);
+        ourToken.approve(alice, allowanceLimit);
+
+        vm.prank(alice);
+        ourToken.transferFrom(bob, alice, allowanceLimit);
+
+        assertEq(ourToken.balanceOf(bob), STARTING_BALANCE - allowanceLimit);
+    }
 }
